@@ -211,12 +211,12 @@ log_action_end_msg $?
 
 if [[ "${IPV6}" == '1' ]]; then
     log_action_begin_msg "enabling sniproxy IPv6 priority"
-    printf "\nresolver {\n  nameserver ${RESOLVER_PRI}\n  nameserver ${RESOLVER_SEC}\n  mode ipv6_first\n}\n"\
+    printf "\nresolver {\n  nameserver 127.0.0.1\n  mode ipv6_first\n}\n"\
       | sudo tee -a ${CWD}/docker-sniproxy/sniproxy.conf &>> ${CWD}/netflix-proxy.log
     log_action_end_msg $?
 else
     log_action_begin_msg "configuring sniproxy and Docker"
-    printf "\nresolver {\n  nameserver ${RESOLVER_PRI}\n  nameserver ${RESOLVER_SEC}\n  mode ipv4_only\n}\n"\
+    printf "\nresolver {\n  nameserver 127.0.0.1\n  mode ipv4_only\n}\n"\
       | sudo tee -a ${CWD}/docker-sniproxy/sniproxy.conf &>> ${CWD}/netflix-proxy.log
     log_action_end_msg $?
 fi
@@ -320,7 +320,7 @@ log_action_end_msg $?
 if [[ "${DOCKER_BUILD}" == '1' ]]; then
     log_action_begin_msg "pulling and building docker containers from source"
     sudo $(which docker-compose) build &>> ${CWD}/netflix-proxy.log
-    for service in dnsmasq-service dnsmasq-bogus-service caddy-service; do
+    for service in dnsmasq-service dnsmasq-bogus-service caddy-service dnsmasq-5399-service; do
         sudo $(which docker-compose) pull ${service} &>> ${CWD}/netflix-proxy.log
     done
     log_action_end_msg $?
