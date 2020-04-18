@@ -28,6 +28,22 @@ services:
     command: --port=5353 --log-facility=- -A /#/${EXTIP} -A /#/${EXTIP6}
     restart: always
 
+  dnsmasq-5399-service:
+    image: andyshinn/dnsmasq:latest
+    container_name: dnsmasq-5399
+    privileged: true
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "5399:5399"
+      - "5399:5399/udp"
+    volumes:
+      - ./dnsmasq_5399.conf:/etc/dnsmasq.conf:ro
+      - ./addnHosts.txt:/etc/addnHosts.txt:ro
+    command: --port=5399 --log-facility=-
+    restart: always
+
   caddy-service:
     image: abiosoft/caddy:latest
     container_name: caddy
@@ -41,7 +57,6 @@ services:
     restart: always
   
   sniproxy-service:
-    image: ab77/sniproxy:latest
     container_name: sniproxy
     build:
       context: docker-sniproxy
