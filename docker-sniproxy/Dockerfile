@@ -14,7 +14,7 @@ RUN apk add --no-cache\
 
 WORKDIR /root
 
-## clone and build udns from scretch
+## clone and build udns from source
 RUN git clone https://github.com/ortclib/udns.git
 WORKDIR /root/udns
 
@@ -41,7 +41,7 @@ WORKDIR /root
 
 ADD functions ./
 
-## bild sniproxy from source to respect the new nameserver port
+## build sniproxy from source to respect the new nameserver port
 
 RUN git clone https://github.com/dlundquist/sniproxy.git
 
